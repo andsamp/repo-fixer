@@ -1,12 +1,16 @@
-import { generateExecaParams, generateUserExecaCommands } from './utils'
+import { generateExecaParams } from '../utils/execa'
+import { generateUserTasks } from './generate-user-tasks'
+import Listr from 'listr'
+import execa from 'execa'
 
-const execa = require('execa')
-const Listr = require('listr')
-
-export const generateTasks = ({ mainBranch = 'master' }) => {
+export const generateProjectTasks = (projectName) => {
   return new Listr([
     {
-      title: 'Repository Prep',
+      title: `Navigating to ${projectName}`,
+      task: (ctx) => execa.stdout('cd', [`${ctx.baseDirectory}/projectName`])
+    },
+    {
+      title: `Repository Prep for ${projectName}`,
       task: () => {
         return new Listr([
           {
@@ -14,6 +18,7 @@ export const generateTasks = ({ mainBranch = 'master' }) => {
             task: (ctx) => execa.stdout('git', ['status', '--porcelain']).then(result => {
               if (result !== '') {
                 ctx.stash = true
+                console.warn(`Stashing changes for ${projectName}`)
               }
             })
           },
@@ -38,9 +43,9 @@ export const generateTasks = ({ mainBranch = 'master' }) => {
       }
     },
     {
-      title: 'User commands',
+      title: `Execute User Commands Against ${projectName}`,
       task: (ctx) => {
-        return new Listr(generateUserCommands(ctx.userCommands))
+        return new Listr(generateUserTasks(ctx.userCommands))
       }
     },
     {
@@ -69,13 +74,4 @@ export const generateTasks = ({ mainBranch = 'master' }) => {
       }
     }
   ])
-}
-
-const generateUserCommands = userCommands => {
-  generateUserExecaCommands(userCommands).map(execaCommand => {
-    return {
-      title: execaCommand.title,
-      task: () => execa.stdout(...execaCommand.execaCommandParams)
-    }
-  })
 }

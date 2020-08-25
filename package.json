@@ -5,7 +5,10 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src"
   },
-  "main": "index.js",
+  "main": "src/cli.js",
+  "bin": {
+    "fix-repos": "bin/repo-fixer"
+  },
   "repository": "git@github.com:andsamp/repo-fixer.git",
   "author": "andsamp",
   "license": "MIT",
