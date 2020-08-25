@@ -1,4 +1,4 @@
-import { generateUserExecaCommands } from './utils'
+import { generateExecaParams, generateUserExecaCommands } from './utils'
 
 const execa = require('execa')
 const Listr = require('listr')
@@ -44,6 +44,16 @@ export const generateTasks = ({ mainBranch = 'master' }) => {
       }
     },
     {
+      title: 'Test Changes',
+      task: (ctx) => {
+        if (ctx.testCommand) {
+          return execa.stdout(generateExecaParams(ctx.testCommand))
+        } else {
+          return execa.stdout('npm', ['test'])
+        }
+      }
+    },
+    {
       title: 'Push Changes to remote',
       task: () => {
         return new Listr([
@@ -65,7 +75,7 @@ const generateUserCommands = userCommands => {
   generateUserExecaCommands(userCommands).map(execaCommand => {
     return {
       title: execaCommand.title,
-      task: execa.stdout(...execaCommand.execaCommandParams)
+      task: () => execa.stdout(...execaCommand.execaCommandParams)
     }
   })
 }
