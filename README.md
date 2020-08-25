@@ -5,7 +5,7 @@
   "git": {
     "mainBranch": "master", //optional
     "remote": "origin", //optional
-    "newBranch": "[TIKT-405] updating dependencies",
+    "newBranch": "technical/update-deps",
     "commitMessage": "adding dependencies for TIKT-405"
   },
   "projects": [
