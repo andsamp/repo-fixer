@@ -5,7 +5,7 @@ export const generateUserTasks = userCommands => {
   generateUserExecaCommands(userCommands).map(execaCommand => {
     return {
       title: execaCommand.title,
-      task: () => execa.stdout(...execaCommand.execaCommandParams)
+      task: () => execa(...execaCommand.execaCommandParams)
     }
   })
 }

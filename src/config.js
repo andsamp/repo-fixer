@@ -3,11 +3,13 @@ import { defaultsDeep } from 'lodash'
 import { isValidDirectoryPath, isValidFilePath } from './utils/file'
 import { validateArray, validateExists } from './utils/config-validation'
 
+const fs = require('fs')
 const path = require('path')
 
 export const generateConfig = (configFile) => {
   if (isValidFilePath(configFile)) {
-    const config = defaultsDeep(require(configFile), DEFAULT_CONFIG)
+    const userConfig = JSON.parse(fs.readFileSync(configFile))
+    const config = defaultsDeep(userConfig, DEFAULT_CONFIG)
 
     validateConfig(config)
 
@@ -36,10 +38,10 @@ export const validateConfig = (config) => {
   configValidationErrors.push(...validateArray(config, 'projects'))
   configValidationErrors.push(...validateArray(config, 'commands'))
 
-  configValidationErrors.push(validateExists(config, 'installCommand'))
-  configValidationErrors.push(validateExists(config, 'testCommand'))
+  configValidationErrors.push(...validateExists(config, 'installCommand'))
+  configValidationErrors.push(...validateExists(config, 'testCommand'))
 
   if (configValidationErrors.length > 0) {
-    throw new Error(`Invalid Configuration: ${configValidationErrors}`)
+    throw new Error(`Invalid Configuration: ${JSON.stringify(configValidationErrors)}`)
   }
 }

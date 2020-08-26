@@ -13,5 +13,9 @@ export const validateArray = (config, key) => {
 }
 
 export const validateExists = (config, key) => {
+  if (!config[key]) {
+    return [`${key} not specified`]
+  }
 
+  return []
 }

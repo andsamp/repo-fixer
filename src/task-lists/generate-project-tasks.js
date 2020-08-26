@@ -2,12 +2,13 @@ import { generateExecaParams } from '../utils/execa'
 import { generateUserTasks } from './generate-user-tasks'
 import Listr from 'listr'
 import execa from 'execa'
+const exec = require('child_process').exec
 
 export const generateProjectTasks = (projectName) => {
   return new Listr([
     {
       title: `Navigating to ${projectName}`,
-      task: (ctx) => execa.stdout('cd', [`${ctx.baseDirectory}/projectName`])
+      task: (ctx) => exec(`cd ${ctx.absoluteBaseDirectory}/${projectName}`)// TODO: path.sep
     },
     {
       title: `Repository Prep for ${projectName}`,
@@ -15,7 +16,7 @@ export const generateProjectTasks = (projectName) => {
         return new Listr([
           {
             title: 'checking git status',
-            task: (ctx) => execa.stdout('git', ['status', '--porcelain']).then(result => {
+            task: (ctx) => execa('git', ['status', '--porcelain']).then(result => {
               if (result !== '') {
                 ctx.stash = true
                 console.warn(`Stashing changes for ${projectName}`)
@@ -25,19 +26,19 @@ export const generateProjectTasks = (projectName) => {
           {
             title: 'stashing changes',
             enabled: ctx => ctx.stash === true,
-            task: () => execa.stdout('git', ['stash'])
+            task: () => execa('git', ['stash'])
           },
           {
             title: 'checking out master',
-            task: (ctx) => execa.stdout('git', ['checkout', ctx.git.mainBranch])
+            task: (ctx) => execa('git', ['checkout', ctx.git.mainBranch])
           },
           {
             title: 'pulling remote changes',
-            task: () => execa.stdout('git', ['pull'])
+            task: () => execa('git', ['pull'])
           },
           {
             title: 'creating local branch',
-            task: (ctx) => execa.stdout('git', ['checkout', '-b', ctx.git.newBranch])
+            task: (ctx) => execa('git', ['checkout', '-b', ctx.git.newBranch])
           }
         ])
       }
@@ -52,9 +53,9 @@ export const generateProjectTasks = (projectName) => {
       title: 'Test Changes',
       task: (ctx) => {
         if (ctx.testCommand) {
-          return execa.stdout(generateExecaParams(ctx.testCommand))
+          return execa(generateExecaParams(ctx.testCommand))
         } else {
-          return execa.stdout('npm', ['test'])
+          return execa('npm', ['test'])
         }
       }
     },
@@ -64,11 +65,11 @@ export const generateProjectTasks = (projectName) => {
         return new Listr([
           {
             title: 'Commit changes',
-            task: (ctx) => execa.stdout('git', ['commit', '-am', ctx.git.commitMessage])
+            task: (ctx) => execa('git', ['commit', '-am', ctx.git.commitMessage])
           },
           {
             title: 'Push changes to remote',
-            task: (ctx) => execa.stdout('git', ['push', '-u', ctx.git.remote, ctx.git.newBranch])
+            task: (ctx) => execa('git', ['push', '-u', ctx.git.remote, ctx.git.newBranch])
           }
         ])
       }
