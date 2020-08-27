@@ -1,10 +1,10 @@
-export const generateUserExecaCommands = userCommands => {
+export const generateUserExecaCommands = (userCommands, options) => {
   return userCommands.map(userCommand => {
-    return { title: userCommand, execaCommandParams: generateExecaParams(userCommand) }
+    return { title: userCommand, execaCommandParams: generateExecaParams(userCommand, options) }
   })
 }
 
-export const generateExecaParams = (commandString) => {
+export const generateExecaParams = (commandString, options) => {
   const userCommandArray = commandString.split(' ')
-  return [userCommandArray[0], userCommandArray.slice(1)]
+  return [userCommandArray[0], userCommandArray.slice(1), options]
 }
