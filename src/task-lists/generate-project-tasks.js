@@ -3,7 +3,7 @@ import { generateUserTasks } from './generate-user-tasks'
 import Listr from 'listr'
 import execa from 'execa'
 
-export const generateProjectTasks = (projectName) => {
+export const generateProjectTasks = (projectName, commands) => {
   return new Listr([
     {
       title: `Navigating to ${projectName}`,
@@ -45,7 +45,7 @@ export const generateProjectTasks = (projectName) => {
     {
       title: `Execute User Commands Against ${projectName}`,
       task: (ctx) => {
-        return new Listr(generateUserTasks(ctx.commands, { cwd: ctx.cwd }))
+        return new Listr(generateUserTasks(commands, { cwd: ctx.cwd }))
       }
     },
     {

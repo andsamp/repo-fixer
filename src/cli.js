@@ -5,6 +5,6 @@ const configFile = 'repo-fixr.json'
 
 const config = generateConfig(configFile)
 
-const batch = generateTopLevelTasks(config.projects)
+const batch = generateTopLevelTasks(config.projects, config.commands)
 
 batch.run(config)
