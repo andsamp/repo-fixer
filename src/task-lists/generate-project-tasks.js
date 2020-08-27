@@ -52,7 +52,7 @@ export const generateProjectTasks = (projectName) => {
       title: 'Test Changes',
       task: (ctx) => {
         if (ctx.testCommand) {
-          return execa(generateExecaParams(ctx.testCommand, { cwd: ctx.cwd }))
+          return execa(...generateExecaParams(ctx.testCommand, { cwd: ctx.cwd }))
         } else {
           return execa('npm', ['test'], { cwd: ctx.cwd })
         }
