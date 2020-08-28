@@ -5,6 +5,5 @@ export const DEFAULT_CONFIG = {
     remote: 'origin',
     stashLocalChanges: true
   },
-  installCommand: 'npm ci',
-  testCommand: 'npm t'
+  installCommand: 'npm ci'
 }

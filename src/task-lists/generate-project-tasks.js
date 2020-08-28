@@ -50,6 +50,7 @@ export const generateProjectTasks = (projectName, commands) => {
     },
     {
       title: 'Test Changes',
+      enabled: ctx => ctx.testCommand || false,
       task: (ctx) => {
         if (ctx.testCommand) {
           return execa(...generateExecaParams(ctx.testCommand, { cwd: ctx.cwd }))

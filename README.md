@@ -1,10 +1,10 @@
 ## Configuration
 ```json
 {
-  "baseDirectory": ".", //optional
+  "baseDirectory": ".", //optional default
   "git": {
-    "mainBranch": "master", //optional
-    "remote": "origin", //optional
+    "mainBranch": "master", //optional default
+    "remote": "origin", //optional default
     "newBranch": "technical/update-deps",
     "commitMessage": "adding dependencies for TIKT-405"
   },
@@ -17,6 +17,6 @@
     "npm i @that/dep@1.0.1",
     "npm i that-other-dep@4.7.1"
   ],
-  "testCommand": "npm test" //optional
+  "testCommand": "npm test" //optional default to skip
 }
 ```

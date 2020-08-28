@@ -39,7 +39,6 @@ export const validateConfig = (config) => {
   configValidationErrors.push(...validateArray(config, 'commands'))
 
   configValidationErrors.push(...validateExists(config, 'installCommand'))
-  configValidationErrors.push(...validateExists(config, 'testCommand'))
 
   if (configValidationErrors.length > 0) {
     throw new Error(`Invalid Configuration: ${JSON.stringify(configValidationErrors)}`)
