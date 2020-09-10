@@ -1,44 +1,34 @@
-import { generateExecaParams } from '../utils/execa'
-import { generateUserTasks } from './generate-user-tasks'
 import Listr from 'listr'
 import execa from 'execa'
+import { generateExecaParams } from '../utils/execa'
+import { generateUserTasks } from './generate-user-tasks'
+import { checkGitStatus } from '../../dist/tasks/git/check-git-status'
+import { stashChanges } from '../tasks/git/stash-changes'
+import { checkoutMainBranch } from '../tasks/git/checkout-main-branch'
+import { createLocalBranch } from '../tasks/git/create-local-branch'
+import { pull } from '../tasks/git/pull'
+import { commit } from '../tasks/git/commit'
+import { pushToRemote } from '../tasks/git/push-to-remote'
 
 export const generateProjectTasks = (projectName, commands) => {
   return new Listr([
     {
       title: `Navigating to ${projectName}`,
-      task: (ctx) => { ctx.cwd = `${ctx.absoluteBaseDirectory}/${projectName}` }
+      task: (ctx) => {
+        ctx.cwd = `${ctx.absoluteBaseDirectory}/${projectName}`
+        ctx.currentProjectName = projectName
+        ctx.stash = undefined
+      }
     },
     {
       title: `Repository Prep for ${projectName}`,
       task: () => {
         return new Listr([
-          {
-            title: 'checking git status',
-            task: (ctx) => execa('git', ['status', '--porcelain'], { cwd: ctx.cwd }).then(result => {
-              if (result !== '') {
-                ctx.stash = true
-                console.warn(`Stashing changes for ${projectName}`)
-              }
-            })
-          },
-          {
-            title: 'stashing changes',
-            enabled: ctx => ctx.stash === true,
-            task: (ctx) => execa('git', ['stash'], { cwd: ctx.cwd })
-          },
-          {
-            title: 'checking out master',
-            task: (ctx) => execa('git', ['checkout', ctx.git.mainBranch], { cwd: ctx.cwd })
-          },
-          {
-            title: 'pulling remote changes',
-            task: (ctx) => execa('git', ['pull'], { cwd: ctx.cwd })
-          },
-          {
-            title: 'creating local branch',
-            task: (ctx) => execa('git', ['checkout', '-b', ctx.git.newBranch], { cwd: ctx.cwd })
-          }
+          checkGitStatus,
+          stashChanges,
+          checkoutMainBranch,
+          pull,
+          createLocalBranch
         ])
       }
     },
@@ -63,14 +53,8 @@ export const generateProjectTasks = (projectName, commands) => {
       title: 'Push Changes to remote',
       task: (ctx) => {
         return new Listr([
-          {
-            title: 'Commit changes',
-            task: (ctx) => execa('git', ['commit', '-am', ctx.git.commitMessage], { cwd: ctx.cwd })
-          },
-          {
-            title: 'Push changes to remote',
-            task: (ctx) => execa('git', ['push', '-u', ctx.git.remote, ctx.git.newBranch], { cwd: ctx.cwd })
-          }
+          commit,
+          pushToRemote
         ])
       }
     }

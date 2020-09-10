@@ -2,13 +2,20 @@
   "name": "repo-fixer",
   "version": "0.0.1",
   "scripts": {
+    "build": "scripts/build.sh",
+    "clean": "rm -rf dist",
+    "healthcheck": "yarn lint && yarn test",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "test": "jest --coverage"
   },
-  "main": "src/cli.js",
   "bin": {
     "fix-repos": "bin/repo-fixr"
   },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "repository": "git@github.com:andsamp/repo-fixer.git",
   "author": "andsamp",
   "license": "MIT",
@@ -20,12 +27,20 @@
     "lodash": "^4.17.20"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "babel-jest": "^26.3.0",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
     "eslint": "^7.7.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2"
   },
   "husky": {
     "hooks": {
