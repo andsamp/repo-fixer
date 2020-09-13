@@ -2,15 +2,11 @@ import Listr from 'listr'
 import execa from 'execa'
 import { generateExecaParams } from '../utils/execa'
 import { generateUserTasks } from './generate-user-tasks'
-import { checkGitStatus } from '../../dist/tasks/git/check-git-status'
-import { stashChanges } from '../tasks/git/stash-changes'
-import { checkoutMainBranch } from '../tasks/git/checkout-main-branch'
-import { createLocalBranch } from '../tasks/git/create-local-branch'
-import { pull } from '../tasks/git/pull'
 import { commit } from '../tasks/git/commit'
 import { pushToRemote } from '../tasks/git/push-to-remote'
+import { generateRepositoryPrepTasks } from './generate-repository-prep-tasks'
 
-export const generateProjectTasks = (projectName, commands) => {
+export const generateProjectTasks = (projectName, commands, gitMode) => {
   return new Listr([
     {
       title: `Navigating to ${projectName}`,
@@ -20,18 +16,7 @@ export const generateProjectTasks = (projectName, commands) => {
         ctx.stash = undefined
       }
     },
-    {
-      title: `Repository Prep for ${projectName}`,
-      task: () => {
-        return new Listr([
-          checkGitStatus,
-          stashChanges,
-          checkoutMainBranch,
-          pull,
-          createLocalBranch
-        ])
-      }
-    },
+    generateRepositoryPrepTasks(projectName, gitMode),
     {
       title: `Execute User Commands Against ${projectName}`,
       task: (ctx) => {
@@ -39,7 +24,7 @@ export const generateProjectTasks = (projectName, commands) => {
       }
     },
     {
-      title: 'Test Changes',
+      title: 'Execute Healthcheck',
       enabled: ctx => ctx.testCommand || false,
       task: (ctx) => {
         if (ctx.testCommand) {

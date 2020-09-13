@@ -14,7 +14,7 @@ describe('create-local-branch', () => {
       ctx = {
         cwd: '/home/andsamp/dev/work-repos/work-project-1',
         git: {
-          newBranch: 'task/make-it-happen'
+          destinationBranch: 'task/make-it-happen'
         }
       }
     })
@@ -27,7 +27,7 @@ describe('create-local-branch', () => {
       await createLocalBranch.task(ctx)
 
       expect(execa).toHaveBeenCalledTimes(1)
-      expect(execa).toHaveBeenCalledWith('git', ['checkout', '-b', ctx.git.newBranch], { cwd: ctx.cwd })
+      expect(execa).toHaveBeenCalledWith('git', ['checkout', '-b', ctx.git.destinationBranch], { cwd: ctx.cwd })
     })
   })
 })

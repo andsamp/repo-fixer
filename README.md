@@ -3,9 +3,10 @@
 {
   "baseDirectory": ".", //optional default
   "git": {
+    "mode": "create-branch", // optional default
     "mainBranch": "master", //optional default
     "remote": "origin", //optional default
-    "newBranch": "technical/update-deps",
+    "destinationBranch": "technical/update-deps",
     "commitMessage": "adding dependencies for TIKT-405"
   },
   "projects": [
