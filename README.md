@@ -21,3 +21,9 @@
   "testCommand": "npm test" //optional default to skip
 }
 ```
+### Git Configuration
+
+#### mode
+* `create-branch` - will create a new branch and push it to the specified remote
+* `update-branch` - will checkout an existing remote branch and commit/push changes to it
+* `skip` - does not run any git commands before or after the specified `commands`
