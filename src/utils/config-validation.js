@@ -1,3 +1,5 @@
+import { GIT_MODE_CREATE, GIT_MODE_UPDATE, VALID_GIT_MODES } from './constants'
+
 export const validateArray = (config, key) => {
   const validationErrors = []
 
@@ -18,4 +20,26 @@ export const validateExists = (config, key) => {
   }
 
   return []
+}
+
+export const validateGitConfig = (gitConfig) => {
+  const configValidationErrors = []
+
+  if (!gitConfig.mode) {
+    configValidationErrors.push('git.mode not specified')
+  } else if (!VALID_GIT_MODES.includes(gitConfig.mode)) {
+    configValidationErrors.push(`git.mode is invalid(allowed values: ${JSON.stringify(VALID_GIT_MODES)}`)
+  }
+
+  if ([GIT_MODE_CREATE, GIT_MODE_UPDATE].includes(gitConfig.mode)) {
+    if (!gitConfig.remote) configValidationErrors.push('git.remote not specified')
+    if (!gitConfig.destinationBranch) configValidationErrors.push('git.destinationBranch not specified')
+    if (!gitConfig.commitMessage) configValidationErrors.push('git.commitMessage not specified')
+  }
+
+  if (GIT_MODE_CREATE === gitConfig.mode) {
+    if (!gitConfig.mainBranch) configValidationErrors.push('git.mainBranch not specified')
+  }
+
+  return configValidationErrors
 }
