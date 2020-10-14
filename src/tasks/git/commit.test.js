@@ -14,7 +14,8 @@ describe('commit', () => {
       ctx = {
         cwd: '/home/andsamp/dev/work-repos/work-project-2',
         git: {
-          commitMessage: '[TIKT-4567] useful commit message'
+          commitMessage: '[TIKT-4567] useful commit message',
+          commitFlags: []
         }
       }
     })
@@ -28,6 +29,14 @@ describe('commit', () => {
 
       expect(execa).toHaveBeenCalledTimes(1)
       expect(execa).toHaveBeenCalledWith('git', ['commit', '-am', ctx.git.commitMessage], { cwd: ctx.cwd })
+    })
+
+    it('should execute the expected task with commitFlags', async () => {
+      ctx.git.commitFlags = ['--no-verify']
+      await commit.task(ctx)
+
+      expect(execa).toHaveBeenCalledTimes(1)
+      expect(execa).toHaveBeenCalledWith('git', ['commit', '-am', ctx.git.commitMessage, ...ctx.git.commitFlags], { cwd: ctx.cwd })
     })
   })
 })

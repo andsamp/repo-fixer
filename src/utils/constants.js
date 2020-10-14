@@ -10,7 +10,9 @@ export const DEFAULT_CONFIG = {
     mode: GIT_MODE_CREATE,
     mainBranch: 'master',
     remote: 'origin',
-    stashLocalChanges: true
+    stashLocalChanges: true,
+    commitFlags: [],
+    pushFlags: []
   },
   installCommand: 'npm ci'
 }

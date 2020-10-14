@@ -1,13 +1,13 @@
 import { GIT_MODE_CREATE, GIT_MODE_UPDATE, VALID_GIT_MODES } from './constants'
 
-export const validateArray = (config, key) => {
+export const validateArray = (config, key, emptyAllowed = false) => {
   const validationErrors = []
 
   if (!config[key]) {
     validationErrors.push(`${key} not specified`)
   } else if (!Array.isArray(config[key])) {
     validationErrors.push(`${key} is NOT an array`)
-  } else if (config.commands.length === 0) {
+  } else if (emptyAllowed && config.commands.length === 0) {
     validationErrors.push(`${key} is an empty array`)
   }
 
@@ -40,6 +40,9 @@ export const validateGitConfig = (gitConfig) => {
   if (GIT_MODE_CREATE === gitConfig.mode) {
     if (!gitConfig.mainBranch) configValidationErrors.push('git.mainBranch not specified')
   }
+
+  configValidationErrors.push(...validateArray(gitConfig, 'commitFlags', true))
+  configValidationErrors.push(...validateArray(gitConfig, 'pushFlags', true))
 
   return configValidationErrors
 }

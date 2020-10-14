@@ -15,7 +15,8 @@ describe('push-to-remote', () => {
         cwd: '/home/andsamp/dev/work-repos/work-project-2',
         git: {
           remote: 'origin',
-          destinationBranch: 'technical/TIKT-4567'
+          destinationBranch: 'technical/TIKT-4567',
+          pushFlags: []
         }
       }
     })
@@ -29,6 +30,14 @@ describe('push-to-remote', () => {
 
       expect(execa).toHaveBeenCalledTimes(1)
       expect(execa).toHaveBeenCalledWith('git', ['push', '-u', ctx.git.remote, ctx.git.destinationBranch], { cwd: ctx.cwd })
+    })
+
+    it('should execute the expected task with pushFlags', async () => {
+      ctx.git.pushFlags = ['--no-verify', '--force']
+      await pushToRemote.task(ctx)
+
+      expect(execa).toHaveBeenCalledTimes(1)
+      expect(execa).toHaveBeenCalledWith('git', ['push', '-u', ctx.git.remote, ctx.git.destinationBranch, ...ctx.git.pushFlags], { cwd: ctx.cwd })
     })
   })
 })

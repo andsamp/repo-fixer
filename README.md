@@ -7,7 +7,9 @@
     "mainBranch": "master", //optional default
     "remote": "origin", //optional default
     "destinationBranch": "technical/update-deps",
-    "commitMessage": "adding dependencies for TIKT-405"
+    "commitMessage": "[TIKT-145] updating dependencies for that reason",
+    "commitFlags": [], //optional default
+    "pushFlags": [] //optional default
   },
   "projects": [
     "project-1",
