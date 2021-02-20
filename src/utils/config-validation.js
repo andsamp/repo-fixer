@@ -1,13 +1,15 @@
 import { GIT_MODE_CREATE, GIT_MODE_UPDATE, VALID_GIT_MODES } from './constants'
 
 export const validateArray = (config, key, emptyAllowed = false) => {
+  console.log(`>>>validateArray(config, ${key}, ${emptyAllowed})`)
+  console.log(JSON.stringify(config, undefined, 2))
   const validationErrors = []
 
   if (!config[key]) {
     validationErrors.push(`${key} not specified`)
   } else if (!Array.isArray(config[key])) {
     validationErrors.push(`${key} is NOT an array`)
-  } else if (emptyAllowed && config.commands.length === 0) {
+  } else if (!emptyAllowed && config[key].length === 0) {
     validationErrors.push(`${key} is an empty array`)
   }
 
@@ -23,6 +25,7 @@ export const validateExists = (config, key) => {
 }
 
 export const validateGitConfig = (gitConfig) => {
+  console.log('gitConfig')
   const configValidationErrors = []
 
   if (!gitConfig.mode) {
