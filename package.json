@@ -1,6 +1,6 @@
 {
   "name": "repo-fixer",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "scripts": {
     "build": "scripts/build.sh",
     "clean": "rm -rf dist",
@@ -12,7 +12,7 @@
   "bin": "bin/repo-fixr",
   "files": [
     "bin",
-    "src"
+    "dist"
   ],
   "repository": "git@github.com:andsamp/repo-fixer.git",
   "author": "andsamp",
