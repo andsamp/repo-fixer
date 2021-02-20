@@ -1,6 +1,6 @@
 {
   "name": "repo-fixer",
-  "version": "0.0.9-2",
+  "version": "0.0.10",
   "scripts": {
     "build": "scripts/build.sh",
     "clean": "rm -rf dist",
