@@ -1,6 +1,6 @@
 {
   "name": "repo-fixer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "build": "scripts/build.sh",
     "clean": "rm -rf dist",
@@ -9,9 +9,7 @@
     "lint:fix": "eslint --fix src",
     "test": "jest --coverage"
   },
-  "bin": {
-    "fix-repos": "bin/repo-fixr"
-  },
+  "bin": "bin/repo-fixr",
   "files": [
     "bin",
     "dist"
