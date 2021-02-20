@@ -1,8 +1,6 @@
 import { GIT_MODE_CREATE, GIT_MODE_UPDATE, VALID_GIT_MODES } from './constants'
 
 export const validateArray = (config, key, emptyAllowed = false) => {
-  console.log(`>>>validateArray(config, ${key}, ${emptyAllowed})`)
-  console.log(JSON.stringify(config, undefined, 2))
   const validationErrors = []
 
   if (!config[key]) {
