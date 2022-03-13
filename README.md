@@ -1,3 +1,8 @@
+## Options
+* `config` - location of the config file to process
+  * **Default:** `./config.json`
+  * **Example:** `repo-fixer --config ./ui-lib-v7.json`
+
 ## Configuration
 ```json
 {
